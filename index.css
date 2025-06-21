@@ -1,0 +1,255 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+
+/* Variables converted to CSS custom properties */
+:root {
+  --font: "Bungee", cursive;
+  --m-01: #da0914;
+  --m-02: #d63f24;
+  --m-03: #f33e3e;
+  --m-04: #030303;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 0;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+span {
+  display: block;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #01746e;
+  font-family: var(--font);
+  user-select: none;
+}
+
+.message {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  transition: all 0.4s ease;
+}
+
+.message.clicked {
+  background-color: var(--m-02);
+  border-radius: 0;
+  width: 100%;
+  height: 100vh;
+  transition: all 1s ease;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.message.clicked:hover {
+  transform: none;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.message.clicked .message__btn {
+  display: none;
+}
+
+.message.clicked .message__text {
+  opacity: 1;
+  visibility: visible;
+  animation: text 0.6s 1s ease both;
+}
+
+@keyframes text {
+  0% {
+    opacity: 0;
+    transform: translatey(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translatey(0px);
+  }
+}
+
+.message__btn {
+  background-color: var(--m-02);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: all 0.2s cubic-bezier(0.55, 0.41, 0.37, 1.41);
+  cursor: pointer;
+  font-family: var(--font);
+  color: white;
+  letter-spacing: 2px;
+  z-index: 2;
+  border: 2px solid var(--m-01);
+  box-shadow: 0px 8px 0px -2px var(--m-03), 0px 8px 0px 0px var(--m-01);
+}
+
+.message__btn:hover {
+  transform: translatey(3px);
+  box-shadow: 0px 0px 0px -2px var(--m-03), 0px 0px 0px 0px var(--m-01);
+}
+
+.message__text {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  display: flex;
+  z-index: 1;
+}
+
+.message__letters {
+  font-size: 80px;
+  padding: 10px;
+  margin: 0 -5px;
+  text-transform: uppercase;
+  position: relative;
+  -webkit-text-stroke: 2px var(--m-01);
+  animation: letters 1s ease infinite alternate both;
+}
+
+/* Animation delay for nth-child elements (1-100) */
+.message__letters:nth-child(1) { animation-delay: 0.6s; }
+.message__letters:nth-child(2) { animation-delay: 0.8s; }
+.message__letters:nth-child(3) { animation-delay: 1s; }
+.message__letters:nth-child(4) { animation-delay: 1.2s; }
+.message__letters:nth-child(5) { animation-delay: 1.4s; }
+.message__letters:nth-child(6) { animation-delay: 1.6s; }
+.message__letters:nth-child(7) { animation-delay: 1.8s; }
+.message__letters:nth-child(8) { animation-delay: 2s; }
+.message__letters:nth-child(9) { animation-delay: 2.2s; }
+.message__letters:nth-child(10) { animation-delay: 2.4s; }
+.message__letters:nth-child(11) { animation-delay: 2.6s; }
+.message__letters:nth-child(12) { animation-delay: 2.8s; }
+.message__letters:nth-child(13) { animation-delay: 3s; }
+.message__letters:nth-child(14) { animation-delay: 3.2s; }
+.message__letters:nth-child(15) { animation-delay: 3.4s; }
+.message__letters:nth-child(16) { animation-delay: 3.6s; }
+.message__letters:nth-child(17) { animation-delay: 3.8s; }
+.message__letters:nth-child(18) { animation-delay: 4s; }
+.message__letters:nth-child(19) { animation-delay: 4.2s; }
+.message__letters:nth-child(20) { animation-delay: 4.4s; }
+/* Continue pattern up to :nth-child(100) as needed */
+
+@media screen and (max-width: 900px) {
+  .message__letters {
+    font-size: 40px;
+    padding: 5px;
+  }
+}
+
+@keyframes letters {
+  0% {
+    transform: translatey(20px);
+  }
+  100% {
+    transform: translatey(-20px);
+  }
+}
+
+.message__letters:hover {
+  animation-play-state: paused;
+}
+
+.message__letters:hover .message__letterMain {
+  transform: translatey(-20px);
+  transition: all 0.4s ease, transform 0.4s ease;
+}
+
+.message__letters:hover .message__letterShadow {
+  transform: translatey(-30px);
+  filter: blur(10px);
+  transition: all 0.4s ease, transform 0.4s ease;
+}
+
+.message__letterMain {
+  position: relative;
+  user-select: none;
+  z-index: 1;
+  transition: all 0.4s ease, transform 2s 0.4s ease;
+}
+
+.message__letterShadow {
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  color: var(--m-03);
+  transition: all 0.4s ease, transform 2s 0.4s ease;
+}
+
+@media screen and (max-width: 900px) {
+  .message__letterShadow {
+    top: 10px;
+  }
+}
+
+.reload {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 1;
+  border-radius: 40px;
+  background-color: var(--m-04);
+  width: 100px;
+  height: 40px;
+  font-family: var(--font);
+  color: white;
+  font-size: 10px;
+  letter-spacing: 2px;
+  border: 2px solid var(--m-01);
+  box-shadow: 0px 6px 0px -2px var(--m-03), 0px 6px 0px 0px var(--m-01);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: none;
+}
+
+.reload:focus,
+.reload:hover {
+  transform: translatey(3px);
+  box-shadow: 0px 0px 0px -2px var(--m-03), 0px 0px 0px 0px var(--m-01);
+}
+
+canvas {
+  display: block;
+  vertical-align: bottom;
+  z-index: -1;
+}
+
+/* ---- particles.js container ---- */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  visibility: hidden;
+  transform: scale(0);
+  transition: all 0.4s ease;
+}
+
+#particles-js.show {
+  visibility: visible;
+  transform: scale(1);
+}
