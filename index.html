@@ -4,22 +4,203 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Happy Birthday Big Sis</title>
-   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-   <script src="https://threejs.org/build/three.min.js"></script>
-   <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-   <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script>
+     tailwind.config = {
+       theme: {
+         extend: {
+           fontFamily: {
+             'bungee': ['Bungee', 'cursive']
+           },
+           colors: {
+             'm-01': '#da0914',
+             'm-02': '#d63f24', 
+             'm-03': '#f33e3e',
+             'm-04': '#030303'
+           },
+           animation: {
+             'text': 'text 0.6s 1s ease both',
+             'letters': 'letters 1s ease infinite alternate both'
+           },
+           keyframes: {
+             text: {
+               '0%': { opacity: '0', transform: 'translateY(80px)' },
+               '100%': { opacity: '1', transform: 'translateY(0)' }
+             },
+             letters: {
+               '0%': { transform: 'translateY(20px)' },
+               '100%': { transform: 'translateY(-20px)' }
+             }
+           }
+         }
+       }
+     }
+   </script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="index.css">
+   <link rel="icon" type="image/png" href="assets/cakefavicon.256.png">
 </head>
-<body>
-   <div class="message">
-      <button class="message__btn">click me</button>
-   <p class="message__text"></p> 
-      </div>
-   <button class="reload">reload</button>
+<body class="flex justify-center items-center min-h-screen bg-teal-600 font-bungee select-none overflow-hidden">
+   <div class="message w-32 h-32 sm:w-40 sm:h-40 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex justify-center items-center bg-transparent transition-all duration-1000 ease-in-out">
+      <button class="message__btn message-btn-hover w-full h-full rounded-full transition-all duration-200 cursor-pointer font-bungee text-white tracking-wider z-20 border-2 border-m-01 bg-m-02 text-xs sm:text-sm md:text-base" 
+              style="box-shadow: 0px 8px 0px -2px #f33e3e, 0px 8px 0px 0px #da0914; transition: all 0.2s cubic-bezier(0.55, 0.41, 0.37, 1.41);">
+        click me
+      </button>
+      <p class="message__text opacity-0 invisible absolute flex z-10"></p> 
+   </div>
+   
+   <button class="reload reload-btn-hover absolute right-4 top-4 sm:right-5 sm:top-5 z-10 rounded-full bg-m-04 w-20 h-8 sm:w-24 sm:h-10 font-bungee text-white text-xs tracking-wider border-2 border-m-01 transition-all duration-200 cursor-pointer hidden"
+           style="box-shadow: 0px 6px 0px -2px #f33e3e, 0px 6px 0px 0px #da0914;">
+     reload
+   </button>
    
    <!-- particles.js container -->
-   <div id="particles-js"></div>
+   <div id="particles-js" class="absolute w-full h-full bg-cover bg-center bg-no-repeat invisible scale-0 transition-all duration-400 ease-in-out"></div>
 
-   <script src="index.js"></script>
+   <script>
+     function message() {
+       // Different message layouts for mobile vs desktop
+       const isMobile = window.innerWidth < 768;
+       const message = isMobile ? "Happy|Birthday|Pauline" : "Happy Birthday|Pauline";
+       const messageText = document.querySelector(".message__text");
+       const messageContainer = document.querySelector(".message");
+       const messageBtn = document.querySelector(".message__btn");
+       const reloadBtn = document.querySelector(".reload");
+       const particlesContainer = document.getElementById("particles-js");
+       const colors = ["#1e293b", "#ffd166", "#3a86ff", "#2ec4b6"];
+       let colorIndex = 0;
+
+       // Event Listeners
+       messageBtn.addEventListener("click", openMessage);
+       reloadBtn.addEventListener("click", openMessage);
+
+       // Message Reveal Logic
+       function openMessage() {
+         if (messageContainer.classList.contains("clicked")) {
+           // Reset state
+           messageContainer.classList.remove("clicked");
+           messageContainer.className = "message w-32 h-32 sm:w-40 sm:h-40 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex justify-center items-center bg-transparent transition-all duration-1000 ease-in-out";
+           
+           reloadBtn.style.display = "none";
+           messageBtn.style.display = "block";
+           particlesContainer.classList.remove("show");
+           particlesContainer.className = "absolute w-full h-full bg-cover bg-center bg-no-repeat invisible scale-0 transition-all duration-400 ease-in-out";
+           messageText.innerHTML = "";
+           messageText.className = "message__text opacity-0 invisible absolute flex z-10";
+         } else {
+           // Expand state
+           messageContainer.classList.add("clicked");
+           messageContainer.className = "message clicked bg-m-02 rounded-none w-full h-screen transition-all duration-1000 ease-in-out flex justify-center items-center";
+           
+           reloadBtn.style.display = "block";
+           messageBtn.style.display = "none";
+
+           // Show message letters with shadow layers - split by lines
+           const lines = message.split("|");
+           let globalIndex = 0;
+           
+           lines.forEach((line, lineIndex) => {
+             // Create line container
+             const lineContainer = document.createElement("div");
+             lineContainer.className = "flex justify-center items-center flex-wrap";
+             
+             const lineSplit = line.split("");
+             lineSplit.forEach((char, charIndex) => {
+               const span = document.createElement("span");
+               span.classList.add("message__letters");
+               span.className = "message__letters text-4xl sm:text-6xl md:text-7xl lg:text-8xl p-2 sm:p-3 -mx-1 sm:-mx-2 uppercase relative animate-letters block";
+               span.style.WebkitTextStroke = "2px #da0914";
+               span.style.animationDelay = `${0.6 + globalIndex * 0.2}s`;
+
+               const main = document.createElement("span");
+               main.classList.add("message__letterMain");
+               main.className = "message__letterMain relative select-none z-10";
+               main.style.color = colors[colorIndex % colors.length];
+               main.innerHTML = char === " " ? "&nbsp;" : char;
+
+               const shadow = document.createElement("span");
+               shadow.classList.add("message__letterShadow");
+               shadow.className = "message__letterShadow absolute left-2 sm:left-3 top-4 sm:top-5 md:top-8 text-m-03";
+               shadow.style.animationDelay = `${0.6 + globalIndex * 0.2}s`;
+               shadow.innerHTML = char === " " ? "&nbsp;" : char;
+
+               span.appendChild(main);
+               span.appendChild(shadow);
+               lineContainer.appendChild(span);
+               colorIndex++;
+               globalIndex++;
+             });
+             
+             messageText.appendChild(lineContainer);
+           });
+
+           // Update message text classes for animation with responsive gap
+           messageText.className = "message__text opacity-100 visible absolute flex z-10 flex-col justify-center items-center px-4 sm:px-8 gap-1 sm:gap-4";
+           messageText.style.animation = "text 0.6s 1s ease both";
+
+           // Show particles
+           setTimeout(() => {
+             particlesContainer.classList.add("show");
+             particlesContainer.className = "absolute w-full h-full bg-cover bg-center bg-no-repeat visible scale-100 transition-all duration-400 ease-in-out";
+           }, 1000);
+         }
+       }
+
+       // ---- particles.js config ----
+       particlesJS("particles-js", {
+         particles: {
+           number: { 
+             value: window.innerWidth < 768 ? 40 : 80, 
+             density: { enable: true, value_area: 800 } 
+           },
+           color: {
+             value: [
+               "#f7b267", "#f79d65", "#f4845f", "#f27059", "#f25c54",
+               "#ffffff", "#cc444b", "#ff6b6b", "#e63946"
+             ]
+           },
+           shape: {
+             type: "circle",
+             stroke: { width: 0, color: "#000000" },
+             polygon: { nb_sides: 5 }
+           },
+           opacity: { value: 1 },
+           size: { 
+             value: window.innerWidth < 768 ? 4 : 6, 
+             random: true 
+           },
+           line_linked: { enable: false },
+           move: {
+             enable: true,
+             speed: window.innerWidth < 768 ? 4 : 6,
+             direction: "top",
+             random: true,
+             out_mode: "bounce"
+           }
+         },
+         interactivity: {
+           detect_on: "canvas",
+           events: {
+             onhover: { enable: true, mode: "repulse" },
+             onclick: { enable: true, mode: "push" },
+             resize: true
+           },
+           modes: {
+             repulse: { 
+               distance: window.innerWidth < 768 ? 100 : 150, 
+               duration: 0.4 
+             },
+             push: { particles_nb: 4 }
+           }
+         },
+         retina_detect: true
+       });
+     }
+
+     document.addEventListener("DOMContentLoaded", message);
+   </script>
 </body>
 </html>
